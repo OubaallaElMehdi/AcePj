@@ -14,5 +14,5 @@ class AnomalyDetector:
         """
         if not isinstance(data, np.ndarray):
             raise ValueError("Data must be a numpy array.")
-        
+
         return self.model.predict(data)

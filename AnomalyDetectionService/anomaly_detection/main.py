@@ -4,7 +4,7 @@ from anomaly_detection.utils.anomaly_detection import AnomalyDetector
 
 app = Flask(__name__)
 
-# Load the pre-trained Isolation Forest model
+# Load the pre-trained model
 detector = AnomalyDetector('anomaly_detection/models/model.pkl')
 
 @app.route('/predict', methods=['POST'])

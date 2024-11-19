@@ -1,0 +1,5 @@
+.\venv\Scripts\Activate
+pip install -r requirements.txt
+
+
+$env:PYTHONPATH = $env:PYTHONPATH + ";C:\Users\smolv\Desktop\Ace\VehicleService\AnomalyDetectionService"
