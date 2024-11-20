@@ -15,7 +15,7 @@ FROM eclipse-temurin:17-jre
 WORKDIR /app
 
 # Copy the built jar
-COPY --from=builder /app/target/alert-service-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=builder /app/target/AlertService-0.0.1-SNAPSHOT.jar app.jar
 
 # Expose the application port
 EXPOSE 8083

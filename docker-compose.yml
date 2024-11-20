@@ -11,7 +11,7 @@ services:
     environment:
       - EUREKA_CLIENT_REGISTER_WITH_EUREKA=false
       - EUREKA_CLIENT_FETCH_REGISTRY=false
-    restart: always
+
 
   # Gateway Service
   gateway-service:
@@ -27,7 +27,7 @@ services:
     environment:
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://ace-eureka:8761/eureka
       - SPRING_PROFILES_ACTIVE=docker
-    restart: always
+
 
   # Vehicle Service
   vehicle-service:
@@ -46,7 +46,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://vehicle-db:3306/vehicle_service
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
-    restart: always
+
 
   # User Service
   user-service:
@@ -65,7 +65,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://user-db:3306/user_service
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
-    restart: always
+
 
   # Alert Service
   alert-service:
@@ -84,7 +84,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://alert-db:3306/alert_service
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
-    restart: always
+
 
   # Anomaly Detection Service
   anomaly-detection-service:
@@ -97,7 +97,7 @@ services:
       - ace-network
     depends_on:
       - vehicle-service
-    restart: always
+
 
   # MySQL for Vehicle Service
   vehicle-db:
@@ -146,7 +146,7 @@ services:
       - ace-network
     depends_on:
       - gateway-service
-    restart: always
+
     environment:
       - NG_PROXY=http://gateway-service:8080 # Proxy to backend gateway
 
