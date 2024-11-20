@@ -1,26 +1,23 @@
-# Use Maven with OpenJDK 17 to build the application
-FROM maven:3.8-openjdk-17-slim AS build
-
-# Set working directory for Maven
+# Stage 1: Build the application
+FROM maven:3.9.4-eclipse-temurin-17 as builder
 WORKDIR /app
 
-# Copy Maven project files
+# Copy project files
 COPY pom.xml .
+RUN mvn dependency:go-offline
 COPY src ./src
 
-# Package the JAR
+# Build the application
 RUN mvn clean package -DskipTests
 
-# Runtime image
-FROM openjdk:17-jdk-slim
-
-# Set working directory for runtime
+# Stage 2: Run the application
+FROM eclipse-temurin:17-jre
 WORKDIR /app
 
-# Copy the JAR from the Maven build stage
-COPY --from=build /app/target/Ace-Gateway-0.0.1-SNAPSHOT.jar app.jar
+# Copy the built jar
+COPY --from=builder /app/target/gateway-service-0.0.1-SNAPSHOT.jar app.jar
 
-# Expose the Gateway port
+# Expose the application port
 EXPOSE 8080
 
 # Run the application

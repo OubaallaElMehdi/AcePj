@@ -6,6 +6,8 @@ import com.ace.userservice.config.JwtUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class AuthService {
 
@@ -29,4 +31,14 @@ public class AuthService {
 
         return jwtUtils.generateToken(user.getUsername(), user.getRoles());
     }
+
+    public User saveUser(User user) {
+        return userRepository.save(user);
+    }
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+
 }

@@ -3,18 +3,18 @@ FROM maven:3.9.4-eclipse-temurin-17 as builder
 WORKDIR /app
 
 # Copy project files
-COPY pom.xml ./
+COPY pom.xml .
 RUN mvn dependency:go-offline
 COPY src ./src
 
-# Package the application
+# Build the application
 RUN mvn clean package -DskipTests
 
 # Stage 2: Run the application
-FROM eclipse-temurin:17-jre-slim
+FROM eclipse-temurin:17-jre
 WORKDIR /app
 
-# Copy only the built jar from the builder stage
+# Copy the built jar
 COPY --from=builder /app/target/alert-service-0.0.1-SNAPSHOT.jar app.jar
 
 # Expose the application port

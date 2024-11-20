@@ -3,6 +3,7 @@ package com.ace.userservice.entity;
 import jakarta.persistence.*;
 import java.util.Set;
 
+
 @Entity
 public class User {
     @Id
@@ -18,7 +19,7 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Set<com.example.userservice.entity.Role> roles;
+    private Set<com.ace.userservice.entity.Role> roles;
 
     // Getters and setters
     public Long getId() {
@@ -52,4 +53,5 @@ public class User {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+
 }
