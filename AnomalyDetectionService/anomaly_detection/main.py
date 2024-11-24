@@ -1,25 +1,20 @@
-from flask import Flask, request, jsonify
-from anomaly_detection.utils.data_processing import preprocess_data
-from anomaly_detection.utils.anomaly_detection import AnomalyDetector
+from flask import Flask, jsonify, request
+from utils.data_generation import simulate_and_post_trajectories
+from utils.anomaly_detection import detect_anomalies
 
 app = Flask(__name__)
 
-# Load the pre-trained model
-detector = AnomalyDetector('anomaly_detection/models/model.pkl')
+# Simulate and post trajectories
+@app.route("/simulate", methods=["POST"])
+def simulate():
+    simulate_and_post_trajectories()
+    return jsonify({"message": "Trajectories simulated and posted."})
 
-@app.route('/predict', methods=['POST'])
-def predict():
-    """
-    API endpoint to predict anomalies.
-    Expects JSON payload with trajectory data.
-    """
-    try:
-        data = request.get_json()
-        processed_data = preprocess_data(data)
-        predictions = detector.predict(processed_data)
-        return jsonify({"predictions": predictions.tolist()})
-    except Exception as e:
-        return jsonify({"error": str(e)}), 400
+# Detect anomalies for a specific vehicle
+@app.route("/anomalies/<int:vehicle_id>", methods=["GET"])
+def anomalies(vehicle_id):
+    detect_anomalies(vehicle_id)
+    return jsonify({"message": "Anomalies detected. Check logs for details."})
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)

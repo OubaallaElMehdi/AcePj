@@ -1,18 +1,23 @@
 package com.ace.vehicleservice.entity;
 
 import jakarta.persistence.*;
-import java.util.Objects;
+import java.util.List;
 
 @Entity
 public class Vehicle {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
     private String type;
+    private String status;
 
-    // Getters and setters
+    @OneToMany(mappedBy = "vehicle", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Trajectory> trajectories;
+
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -37,16 +42,19 @@ public class Vehicle {
         this.type = type;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Vehicle)) return false;
-        Vehicle vehicle = (Vehicle) o;
-        return Objects.equals(id, vehicle.id) && Objects.equals(name, vehicle.name) && Objects.equals(type, vehicle.type);
+    public String getStatus() {
+        return status;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, type);
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public List<Trajectory> getTrajectories() {
+        return trajectories;
+    }
+
+    public void setTrajectories(List<Trajectory> trajectories) {
+        this.trajectories = trajectories;
     }
 }

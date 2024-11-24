@@ -1,18 +1,19 @@
-# Stage 1: Use a lightweight Python base image
-FROM python:3.10-slim as builder
+# Base Image
+FROM python:3.9-slim
+
+# Set Working Directory
 WORKDIR /app
 
-# Copy the requirements file first
+# Copy Dependencies
 COPY requirements.txt .
-
-# Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy all source code
-COPY . .
+# Copy the Application
+COPY anomaly_detection ./anomaly_detection
+COPY main.py .
 
-# Expose the Flask application port
+# Expose Port
 EXPOSE 5000
 
-# Run the Flask application
-CMD ["python", "anomaly_detection/main.py"]
+# Command to Run the App
+CMD ["python", "main.py"]

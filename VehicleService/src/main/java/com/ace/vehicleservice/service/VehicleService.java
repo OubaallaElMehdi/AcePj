@@ -21,4 +21,8 @@ public class VehicleService {
     public Vehicle createVehicle(Vehicle vehicle) {
         return vehicleRepository.save(vehicle);
     }
+
+    public List<Vehicle> findAll() {
+        return vehicleRepository.findAll();
+    }
 }
