@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
-from utils.data_generation import simulate_and_post_trajectories
-from utils.anomaly_detection import detect_anomalies
+from anomaly_detection.utils.data_generation import simulate_and_post_trajectories
+from anomaly_detection.utils.anomaly_detection import detect_anomalies
+
 
 app = Flask(__name__)
 

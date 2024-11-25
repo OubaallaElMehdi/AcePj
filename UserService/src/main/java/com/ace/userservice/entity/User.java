@@ -19,7 +19,7 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Set<com.ace.userservice.entity.Role> roles;
+    private Set<Role> roles;
 
     // Getters and setters
     public Long getId() {

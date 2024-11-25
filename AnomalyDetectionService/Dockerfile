@@ -5,12 +5,12 @@ FROM python:3.9-slim
 WORKDIR /app
 
 # Copy Dependencies
-COPY requirements.txt .
+COPY ./anomaly_detection/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the Application
 COPY anomaly_detection ./anomaly_detection
-COPY main.py .
+COPY ./anomaly_detection/main.py .
 
 # Expose Port
 EXPOSE 5000

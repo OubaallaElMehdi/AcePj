@@ -1,52 +1,68 @@
-package com.ace.gateway.acegateway.filters;
+/*package com.ace.gateway.acegateway.filters;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ServerWebExchange;
-import org.springframework.web.server.WebFilter;
-import org.springframework.web.server.WebFilterChain;
-import reactor.core.publisher.Mono;
-
+import org.springframework.web.filter.OncePerRequestFilter;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.util.Collections;
 
 @Component
-public class JwtFilter implements WebFilter {
+public class JwtFilter extends OncePerRequestFilter {
 
-    private static final String SECRET_KEY = "123"; // Replace with a secure key
+    private static final String SECRET_KEY = "admin"; // Use a secure key!
 
-    @Override
-    public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
-        String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
 
-        // Check for Authorization header
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-            return exchange.getResponse().setComplete();
-        }
-
-        // Extract the token
-        String token = authHeader.substring(7);
-
-        // Validate the token
-        try {
-            Claims claims = validateToken(token);
-            // Optionally, add claims to the request context for downstream services
-            exchange.getAttributes().put("claims", claims);
-        } catch (Exception e) {
-            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-            return exchange.getResponse().setComplete();
-        }
-
-        return chain.filter(exchange);
-    }
 
     private Claims validateToken(String token) {
         Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response); // Continue filter chain if no token
+            return;
+        }
+
+        String token = authHeader.substring(7);
+
+        try {
+            Claims claims = validateToken(token);
+
+            // Create authentication token
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(
+                            claims.getSubject(),
+                            null,
+                            Collections.emptyList() // No roles/authorities for simplicity
+                    );
+            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+            // Set the authentication in the SecurityContext
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
+        } catch (Exception e) {
+            // Token validation failed; continue the filter chain without authentication
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
+
+        filterChain.doFilter(request, response); // Continue the filter chain
+    }
 }
+*/
